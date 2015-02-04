@@ -68,8 +68,8 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
     private static final int MAX_CHUNKS = 10000;
     private static final long UPLOAD_TIMEOUT = (2 * 60 * 60 * 1000L);
     private static final long MAX_BUFFERED_IN_STREAM_SIZE = 5 * 1024 * 1024;
-    	
-    
+
+
     private final Provider<AbstractBackupPath> pathProvider;
     private final ICompression compress;
     private final IConfiguration config;
@@ -119,11 +119,15 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
     	 final String curRegion = config.getDC();
          if("us-east-1".equalsIgnoreCase(curRegion) ||
             "us-west-1".equalsIgnoreCase(curRegion) ||
-            "us-west-2".equalsIgnoreCase(curRegion)	|| 
+            "us-west-2".equalsIgnoreCase(curRegion)	||
             "eu-west-1".equalsIgnoreCase(curRegion) ||
-            "sa-east-1".equalsIgnoreCase(curRegion))
+            "sa-east-1".equalsIgnoreCase(curRegion) ||
+            "eu-central-1".equalsIgnoreCase(curRegion) ||
+            "ap-southeast-1".equalsIgnoreCase(curRegion) ||
+            "ap-southeast-2".equalsIgnoreCase(curRegion) ||
+            "ap-northeast-1".equalsIgnoreCase(curRegion))
              return config.getS3EndPoint();
-         
+
          throw new IllegalStateException("Unsupported region for this application: " + curRegion);
     }
 
@@ -179,15 +183,15 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
             if (partNum != partETags.size())
                 throw new BackupRestoreException("Number of parts(" + partNum + ")  does not match the uploaded parts(" + partETags.size() + ")");
             new S3PartUploader(s3Client, part, partETags).completeUpload();
-            
+
             if (logger.isDebugEnabled())
-            {	
+            {
                final S3ResponseMetadata responseMetadata = s3Client.getCachedResponseMetadata(initRequest);
                final String requestId = responseMetadata.getRequestId(); // "x-amz-request-id" header
                final String hostId = responseMetadata.getHostId(); // "x-amz-id-2" header
                logger.debug("S3 AWS x-amz-request-id[" + requestId + "], and x-amz-id-2[" + hostId + "]");
-            }  
-            
+            }
+
         }
         catch (Exception e)
         {
@@ -337,7 +341,7 @@ public class S3FileSystem implements IBackupFileSystem, S3FileSystemMBean
     /**
      * This method does exactly as other download method.(Supposed to be overridden)
      * filePath parameter provides the diskPath of the downloaded file.
-     * This path can be used to correlate the files which are Streamed In 
+     * This path can be used to correlate the files which are Streamed In
      * during Incremental Restores
      */
 	@Override
