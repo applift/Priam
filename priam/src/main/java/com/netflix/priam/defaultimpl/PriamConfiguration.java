@@ -208,6 +208,10 @@ public class PriamConfiguration implements IConfiguration
     private static final String DEFAULT_US_WEST_1_S3_ENDPOINT = "s3-us-west-1.amazonaws.com";
     private static final String DEFAULT_US_WEST_2_S3_ENDPOINT = "s3-us-west-2.amazonaws.com";
     private static final String DEFAULT_EU_WEST_1_S3_ENDPOINT = "s3-eu-west-1.amazonaws.com";
+    private static final String DEFAULT_EU_CENTRAL_1_S3_ENDPOINT = "s3-eu-central-1.amazonaws.com";
+    private static final String DEFAULT_AP_SOUTHEAST_1_S3_ENDPOINT = "s3-ap-southeast-1.amazonaws.com";
+    private static final String DEFAULT_AP_SOUTHEAST_2_S3_ENDPOINT = "s3-ap-southeast-2.amazonaws.com";
+    private static final String DEFAULT_AP_NORTHEAST_1_S3_ENDPOINT = "s3-ap-northeast-1.amazonaws.com";
     private static final String DEFAULT_SA_EAST_1_S3_ENDPOINT = "s3-sa-east-1.amazonaws.com";
 
 
