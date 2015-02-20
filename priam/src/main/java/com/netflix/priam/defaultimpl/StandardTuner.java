@@ -48,14 +48,14 @@ public class StandardTuner implements CassandraTuner
         map.put("start_native_transport", config.isNativeTransportEnabled());
         map.put("native_transport_port", config.getNativeTransportPort());
         map.put("listen_address", hostname);
-        map.put("rpc_address", hostname);
+        map.put("rpc_address", "0.0.0.0");
         //Dont bootstrap in restore mode
         if (!Restore.isRestoreEnabled(config)) {
             map.put("auto_bootstrap", config.getAutoBoostrap());
         } else {
             map.put("auto_bootstrap", false);
         }
-        
+
         map.put("saved_caches_directory", config.getCacheLocation());
         map.put("commitlog_directory", config.getCommitLogLocation());
         map.put("data_file_directories", Lists.newArrayList(config.getDataFileLocation()));
@@ -80,10 +80,10 @@ public class StandardTuner implements CassandraTuner
         map.put("concurrent_reads", config.getConcurrentReadsCnt());
         map.put("concurrent_writes", config.getConcurrentWritesCnt());
         map.put("concurrent_compactors", config.getConcurrentCompactorsCnt());
-        
+
         map.put("rpc_server_type", config.getRpcServerType());
         map.put("index_interval", config.getIndexInterval());
-        
+
         List<?> seedp = (List) map.get("seed_provider");
         Map<String, String> m = (Map<String, String>) seedp.get(0);
         m.put("class_name", seedProvider);
@@ -92,8 +92,8 @@ public class StandardTuner implements CassandraTuner
         configureGlobalCaches(config, map);
         //force to 1 until vnodes are properly supported
 	    map.put("num_tokens", 1);
-	    
-	    
+
+
 	    addExtraCassParams(map);
 
         logger.info(yaml.dump(map));
@@ -196,18 +196,18 @@ public class StandardTuner implements CassandraTuner
         logger.info("Updating yaml" + yaml.dump(map));
         yaml.dump(map, new FileWriter(yamlFile));
     }
-    
-    public void addExtraCassParams(Map map) 
+
+    public void addExtraCassParams(Map map)
     {
     	String params = config.getExtraConfigParams();
     	if (params == null) {
     		logger.info("Updating yaml: no extra cass params");
     		return;
     	}
-    	
+
     	String[] pairs = params.split(",");
     	logger.info("Updating yaml: adding extra cass params");
-    	for(int i=0; i<pairs.length; i++) 
+    	for(int i=0; i<pairs.length; i++)
     	{
     		String[] pair = pairs[i].split("=");
     		String priamKey = pair[0];
